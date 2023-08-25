@@ -1,0 +1,107 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+import java.util.*;
+
+/**
+ *
+ * @author Flex
+ */
+
+public class BiDiMap {
+
+    private final HashMap<String, String> Straight;
+    private final HashMap<String, String> Reverse;
+
+    public BiDiMap() {
+        Straight = new HashMap<>();
+        Reverse = new HashMap<>();
+    }
+    
+    public BiDiMap(HashMap<String, String> Straight, HashMap<String, String> Reverse) {
+        this.Straight = Reverse;
+        this.Reverse = Straight;
+    }
+
+    //@Override    didn't need, because it does not extend the Map!! 
+    public int size() {
+        return Straight.size();
+        
+    }
+
+    //@Override     didn't need, because it does not extend the Map!! 
+    public void put(String k1, String k2) {
+        if (Straight.containsKey(k1)) {
+            Reverse.remove(Straight.get(k1));
+        }
+        if (Reverse.containsKey(k2)) {
+            Straight.remove(Reverse.get(k2));
+        }
+        
+        Straight.put(k1, k2); 
+        Reverse.put(k2, k1);
+        
+        
+    }
+    
+   // @Override   didn't need, because it does not extend the Map!! 
+    public String get(String k1) {
+       
+        return Straight.get(k1);
+    }
+
+    public String getInverse(String k2) {
+       
+       return Reverse.get(k2); 
+        
+    }
+
+    public void remove(String k1) {
+        
+        Reverse.remove(Straight.get(k1));
+        Straight.remove(k1);
+          
+    }
+
+    public void removeInverse(String k2) {
+        
+        Straight.remove(Reverse.get(k2));
+        Reverse.remove(k2);
+    }
+
+    public BiDiMap getInverse() {
+        return new BiDiMap(Straight, Reverse);
+
+    }
+
+
+    public static void main(String[] args) {
+
+        Map<String, String> BiDiMap = new HashMap();
+
+        BiDiMap telKonyv = new BiDiMap();
+
+        telKonyv.put("Jakab", "+36201234567");
+        telKonyv.put("Dezső", "+36309876543");
+        telKonyv.put("Klára", "+36707777777");
+        telKonyv.put("Tibor", "+36909995995");
+        
+        telKonyv.put("Sári", "+36201234567");
+        
+        telKonyv.put("Tibor", "+36201234321");
+
+        System.out.println(telKonyv.getInverse("+36201234567"));
+        System.out.println(telKonyv.get("Tibor"));
+       
+        telKonyv.remove("Dezső");
+        
+        telKonyv.removeInverse("+36201234567");
+
+        BiDiMap telKonyvVissza = telKonyv.getInverse();
+
+        System.out.printf("Bejegyzések száma: %d%n", telKonyv.size());
+    }
+
+}
